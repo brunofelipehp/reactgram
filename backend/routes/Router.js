@@ -2,6 +2,7 @@ const express = require("express")
 const router = express()
 
 router.use("/api/users", require("./UserRouters"))
+router.use("/api/photos", require("./PhotoRouters"))
 
 //test route
 router.get("/", (req, res) => {
