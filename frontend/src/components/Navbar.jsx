@@ -7,19 +7,25 @@ import { Link, NavLink } from "react-router-dom"
 export const Navbar = () => {
   return (
    <nav id="nav">
-    <Link to="/">ReactBram</Link>
-    <form>
+    <Link to="/">ReactGram</Link>
+    <form id='search-form'>
       <BsSearch />
-      <input type="text" />
+      <input type="text" placeholder='Pesquisar'/>
       </form>
-      <ul>
+      <ul id='nav-links'>
+        <li>
         <NavLink to="/">
           <BsHouseDoorFill />
         </NavLink>
+        </li>
+        <li>
         <NavLink to="/login">
           Entrar
         </NavLink>
+        </li>
+        <li>
         <NavLink to="/register">Cadastrar</NavLink>
+        </li>
       </ul>
    </nav>
   )
