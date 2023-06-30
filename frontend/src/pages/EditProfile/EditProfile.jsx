@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { profile } from "../../slices/userSlice";
+import { Message } from "../../components/Message";
+import { profile, resetMessage, updateProfile } from "../../slices/userSlice";
 import { uploads } from "../../utils/config";
 import "./EditProfile.css";
 
@@ -26,10 +27,42 @@ export const EditProfile = () => {
       setEmail(user.email);
       setBio(user.bio);
     }
-  }, []);
+  }, [user]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const userData = {
+      name,
+    };
+
+    if (profileImage) {
+      userData.profileImage = profileImage;
+    }
+
+    if (bio) {
+      userData.bio = bio;
+    }
+
+    if (password) {
+      userData.password = password;
+    }
+
+    const formData = new FormData();
+
+    const userFormData = Object.keys(userData).forEach((key) => {
+      formData.append(key, userData[key]);
+    });
+
+    formData.append("user", userFormData);
+
+    console.log(userData);
+
+    await dispatch(updateProfile(formData));
+
+    setTimeout(() => {
+      dispatch(resetMessage());
+    }, 2000);
   };
 
   const handleFile = (e) => {
@@ -66,7 +99,7 @@ export const EditProfile = () => {
         <input
           type="email"
           placeholder="E-mail"
-          disable
+          disabled
           onChange={(e) => setEmail(e.target.value)}
           value={email || ""}
         />
@@ -92,7 +125,10 @@ export const EditProfile = () => {
             value={password || ""}
           />
         </label>
-        <input type="submit" value="Atualizar" />
+        {!loading && <input type="submit" value="Atualizar" />}
+        {loading && <input type="submit" value="Aguarde..." disabled />}
+        {error && <Message msg={error} type="error" />}
+        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );
