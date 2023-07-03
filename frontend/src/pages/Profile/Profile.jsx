@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getUserDetails } from "../../slices/userSlice";
@@ -13,9 +13,16 @@ export const Profile = () => {
   const { user, loading } = useSelector((state) => state.user);
   const { user: useAuth } = useSelector((state) => state.auth);
 
+  const newPhotoForm = useRef();
+  const editPhotoForm = useRef();
+
   useEffect(() => {
     dispatch(getUserDetails(id));
   }, [dispatch, id]);
+
+  const submitHandle = (e) => {
+    e.preventDefault();
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
@@ -32,6 +39,24 @@ export const Profile = () => {
           <p>{user.bio}</p>
         </div>
       </div>
+      {id === useAuth._id && (
+        <>
+          <div className="new-photo" ref={newPhotoForm}>
+            <h3>Compartilhe algum momento seu:</h3>
+            <form onSubmit={submitHandle}>
+              <label>
+                <span>Título para a foto:</span>
+                <input type="text" placeholder="Insira um título" />
+              </label>
+              <label>
+                <span>Imagem:</span>
+                <input type="file" />
+              </label>
+              <input type="submit" value="Postar" />
+            </form>
+          </div>
+        </>
+      )}
     </div>
   );
 };
