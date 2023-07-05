@@ -1,13 +1,23 @@
+//Hooks
 import { useEffect, useRef, useState } from "react";
+
+//redux
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { Message } from "../../components/Message";
 import { getUserDetails } from "../../slices/userSlice";
+
+//Routes
+import { Link, useParams } from "react-router-dom";
+
+//Components
+import { BsFillEyeFill, BsPencilFill, BsXLg } from "react-icons/bs";
+import { Message } from "../../components/Message";
+
 import { uploads } from "../../utils/config";
 
 import "./Profile.css";
 
 import {
+  deletePhoto,
   getUserPhotos,
   publishPhoto,
   resetMessage,
@@ -44,6 +54,12 @@ export const Profile = () => {
     setImage(image);
   };
 
+  const resetComponentMessage = () => {
+    setTimeout(() => {
+      dispatch(resetMessage());
+    }, 2000);
+  };
+
   const submitHandle = (e) => {
     e.preventDefault();
 
@@ -64,9 +80,13 @@ export const Profile = () => {
 
     setTitle("");
 
-    setTimeout(() => {
-      dispatch(resetMessage());
-    }, 2000);
+    resetComponentMessage();
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deletePhoto(id));
+
+    resetComponentMessage();
   };
 
   if (loading) {
@@ -125,7 +145,13 @@ export const Profile = () => {
                   />
                 )}
                 {id === useAuth._id ? (
-                  <p>actions</p>
+                  <div className="actions">
+                    <Link to={`/photos/${photo._id}`}>
+                      <BsFillEyeFill />
+                    </Link>
+                    <BsPencilFill />
+                    <BsXLg onClick={() => handleDelete(photo._id)} />
+                  </div>
                 ) : (
                   <Link className="btn" to={`/photos/${photo._id}`}></Link>
                 )}
