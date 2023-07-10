@@ -1,5 +1,7 @@
 # dependencies
 /node_modules
+/uploads/photos/
+/uploads/users/
 
 # local env files
 .env*.local
